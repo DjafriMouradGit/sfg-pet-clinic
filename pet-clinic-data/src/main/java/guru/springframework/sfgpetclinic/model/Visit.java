@@ -12,10 +12,10 @@ public class Visit extends BaseEntity {
     private LocalDate date;
     @Column(name = "description")
     private String description;
-    @Column(name = "pet_id")
+
     @ManyToOne
     @JoinColumn(name = "pet_id")
-    private Pet petId;
+    private Pet pet;
 
     public Visit() {
         this.date = LocalDate.now();
@@ -37,13 +37,12 @@ public class Visit extends BaseEntity {
         this.description = description;
     }
 
-    public Integer getPetId() {
-        return this.petId;
+    public Pet getPetId() {
+        return pet;
     }
 
-    public void setPetId(Integer petId) {
-        this.petId = petId;
+    public void setPetId(Pet petId) {
+        this.pet = pet;
     }
-
 }
 
