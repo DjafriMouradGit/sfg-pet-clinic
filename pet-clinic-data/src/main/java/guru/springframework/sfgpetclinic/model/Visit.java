@@ -1,29 +1,22 @@
 package guru.springframework.sfgpetclinic.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.time.LocalDate;
 //import org.springframework.samples.petclinic.model.BaseEntity;
 
-//@Entity
-//@Table(name = "visits")
+@Entity
+@Table(name = "visits")
 public class Visit extends BaseEntity {
 
-    @Column(name = "visit_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "date")
     private LocalDate date;
-
-//    @NotEmpty
     @Column(name = "description")
     private String description;
-
     @Column(name = "pet_id")
-    private Integer petId;
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    private Pet petId;
 
-    /**
-     * Creates a new instance of Visit for the current date
-     */
     public Visit() {
         this.date = LocalDate.now();
     }
