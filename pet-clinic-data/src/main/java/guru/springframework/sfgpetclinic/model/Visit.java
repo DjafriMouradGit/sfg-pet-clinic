@@ -37,11 +37,11 @@ public class Visit extends BaseEntity {
         this.description = description;
     }
 
-    public Pet getPetId() {
+    public Pet getPet() {
         return pet;
     }
 
-    public void setPetId(Pet petId) {
+    public void setPet(Pet pet) {
         this.pet = pet;
     }
 }

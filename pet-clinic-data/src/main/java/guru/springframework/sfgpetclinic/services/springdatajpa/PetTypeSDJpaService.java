@@ -1,7 +1,8 @@
-package guru.springframework.sfgpetclinic.services;
+package guru.springframework.sfgpetclinic.services.springdatajpa;
 
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.repositories.PetTypeRepository;
+import guru.springframework.sfgpetclinic.services.PetTypeService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Service
 @Profile("springDataJpa")
-public class PetTypeSDJpaService implements PetTypeService{
+public class PetTypeSDJpaService implements PetTypeService {
 
     private PetTypeRepository petTypeRepository;
 
