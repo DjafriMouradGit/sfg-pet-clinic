@@ -14,13 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "owners")
 public class Owner extends Person{
-    public Owner(String address, String city, String telephone, Set<Pet> pets) {
-        this.address = address;
-        this.city = city;
-        this.telephone = telephone;
-        this.pets = pets;
-    }
-
     @Column(name = "address")
     private String address;
     @Column(name = "city")
@@ -29,5 +22,4 @@ public class Owner extends Person{
     private String telephone;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Set<Pet> pets=new HashSet<>();
-
 }
