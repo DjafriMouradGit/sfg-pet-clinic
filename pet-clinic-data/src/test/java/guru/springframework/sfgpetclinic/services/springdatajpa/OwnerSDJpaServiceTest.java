@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
@@ -22,22 +23,28 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerSDJpaServiceTest {
-    //Bean
-    @Mock
-    OwnerRepository ownerRepository;
+
+    // Pour définir le mock, soit en utilise Mockito.mock() sinon on utilise l'annotation @Mock
+    // @Spy. La différence entre Mock et Spy : la deuxième permet d’instancier l’objet mocké,
+    // ce qui peut être très utile quand nous souhaitons mocker une classe et non pas une interface.
+
+    OwnerRepository ownerRepository = Mockito.mock(OwnerRepository.class);
     @Mock
     PetTypeRepository petTypeRepository;
     @Mock
     PetRepository petRepository;
+//     Pour injecter une ressource soit InjectMocks soit dans setUp avec new
     @InjectMocks
     OwnerSDJpaService ownerSDJpaService;
+
     // Variables and Objects
     public static final String LAST_NAME = "Smith";
     Owner returnOwner;
 
     @BeforeEach
     void setUp() {
-        returnOwner= Owner.builder().id(1l).lastName(LAST_NAME).build();
+//        ownerSDJpaService=new OwnerSDJpaService(ownerRepository,petTypeRepository,petRepository);
+        returnOwner = Owner.builder().id(1l).lastName(LAST_NAME).build();
     }
 
     @Test
@@ -48,7 +55,9 @@ class OwnerSDJpaServiceTest {
         Owner smith = ownerSDJpaService.findByLastName(LAST_NAME);
         //Then
         assertNotNull(smith);
-        assertEquals(LAST_NAME,smith.getLastName());
+        assertEquals(LAST_NAME, smith.getLastName());
+        // @Verify permet de vérifier qu’une méthode a été bien appelée
+        // et que que les interactions avec le mock sont celles attendues.
         verify(ownerRepository).findByLastName(any());
     }
 
@@ -71,7 +80,7 @@ class OwnerSDJpaServiceTest {
         //Given
         when(ownerRepository.findById(anyLong())).thenReturn(Optional.of(returnOwner));
         //When
-        Owner owner= ownerSDJpaService.findById(1l);
+        Owner owner = ownerSDJpaService.findById(1l);
         //Then
         assertNotNull(owner);
     }
@@ -81,7 +90,7 @@ class OwnerSDJpaServiceTest {
         //Given
         when(ownerRepository.findById(anyLong())).thenReturn(Optional.empty());
         //When
-        Owner owner= ownerSDJpaService.findById(1l);
+        Owner owner = ownerSDJpaService.findById(1l);
         //Then
         assertNull(owner);
     }
@@ -89,10 +98,10 @@ class OwnerSDJpaServiceTest {
     @Test
     void save() {
         //Given
-        Owner ownerToSave=Owner.builder().id(1l).build();
+        Owner ownerToSave = Owner.builder().id(1l).build();
         when(ownerRepository.save(any())).thenReturn(returnOwner);
         //When
-        Owner savedOwner= ownerSDJpaService.save(ownerToSave);
+        Owner savedOwner = ownerSDJpaService.save(ownerToSave);
         //Then
         assertNotNull(savedOwner);
         verify(ownerRepository).save(any());
@@ -101,13 +110,14 @@ class OwnerSDJpaServiceTest {
     @Test
     void delete() {
         ownerSDJpaService.delete(returnOwner);
-        //default is 1 times
-        verify(ownerRepository,times(1)).delete(any());
+        // default is 1 times
+        // nombre total de fois ou la méthode a été appelée
+        verify(ownerRepository, times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
         ownerSDJpaService.deleteById(1l);
-        verify(ownerRepository,times(1)).deleteById(anyLong());
+        verify(ownerRepository, times(1)).deleteById(anyLong());
     }
 }
